@@ -1,7 +1,11 @@
-import 'package:alibyo_qr_scanner/model/auth.dart';
+//import 'dart:convert';
+
+//import 'package:alibyo_qr_scanner/model/api.dart';
+//import 'package:alibyo_qr_scanner/model/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+//import 'package:provider/provider.dart';
 
 import './background.dart';
 import '../../model/http_exception.dart';
@@ -14,9 +18,8 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   Map<String, String> _authData = {
-    'username': '',
+    'email': '',
     'password': '',
-    'device_name': 'mobile',
   };
   final _form = GlobalKey<FormState>();
 
@@ -33,7 +36,7 @@ class _BodyState extends State<Body> {
     }
   }
 
-  void _showDialog(String message) {
+  void _showErrorDialog(String message) {
     showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
@@ -50,168 +53,206 @@ class _BodyState extends State<Body> {
             ));
   }
 
-  Future<void> onSubmit(BuildContext context) async {
+  Future<void> _onSubmit(BuildContext context) async {
     _form.currentState.save();
-    //Navigator.of(context).pushReplacementNamed('/home-screen');
+    // try {
+    print(_authData['email']);
+    print(_authData['password']);
     try {
-      print(_authData['username']);
-      print(_authData['password']);
-
-      await Auth().login(_authData['username'], _authData['password']);
-      if (Auth().isLogin == true) {
-        Navigator.of(context).pushReplacementNamed('/home-screen');
-      } else {
-        print('not login');
+      await Provider.of<Auth>(context, listen: false).login(
+        _authData['email'],
+        _authData['password'],
+      );
+    } on HttpException catch (error) {
+      var errorMessage = 'Authentication failed';
+      if (error.toString().contains('Unauthorized')) {
+        errorMessage = 'Account does not exist';
       }
-
-      //Navigator.of(context).pushReplacementNamed('/home-screen');
-      //}
-      //  on HttpException catch (error) {
-      //   var errorMessage = 'Authentication failed';
-      //   if (error.toString().contains('EMAIL_EXISTS')) {
-      //     errorMessage = 'This Email address is already in used.';
-      //     // } else if (error.toString().contains('INVALID_EMAIL')) {
-      //     //   errorMessage = 'This is not a valid email address';
-      //     // } else if (error.toString().contains('EMAIL_NOT_FOUND')) {
-      //     //   errorMessage = 'Could not find a user with that email.';
-      //}
-      // _showDialog(errorMessage);
+      _showErrorDialog(errorMessage);
     } catch (error) {
-      _showDialog(error);
-      print(error.toString());
-      const errorMessage = 'Could not authenticate you.';
-      _showDialog(errorMessage);
+      const errorMessage =
+          'Could not authenticate you. Please try again later.';
+      _showErrorDialog(errorMessage);
     }
+    // var res =
+    //     await Auth().login(_authData['email'], _authData['password']);
+    // //var body = json.decode();
+    //print(body);
+    // if (Auth().null) {
+    //   Navigator.of(context).pushReplacementNamed('/home-screen');
+    // } else {
+    //   print('not login');
+    // }
+
+    // } catch (error) {
+    //   _showDialog(error);
+    //   print(error.toString());
+    //   const errorMessage = 'Could not authenticate you.';
+    //   _showDialog(errorMessage);
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
-    //final <Map<List, String>Dummy_account> dummy = [];
-
-    //final tr = Dummy_Account.map((acc) => acc.username).toString();
-
     Size size = MediaQuery.of(context).size;
+    var inputDecoration = InputDecoration(
+        icon: Icon(
+          Icons.person,
+          color: Theme.of(context).primaryColor,
+        ),
+        hintText: 'Username',
+        border: InputBorder.none);
     return Background(
       child: Column(
         children: [
           Container(
-            width: size.width * .8,
-            padding: EdgeInsets.fromLTRB(0, 230, 0, 0),
+            width: size.width * .6,
+            height: size.height * .45,
+            padding: EdgeInsets.fromLTRB(0, 120, 0, 0),
             child: Image.asset(
-              'assets/images/alibyo_test_logo.png',
+              'assets/images/alibyo_logo.png',
               fit: BoxFit.fill,
             ),
           ),
-          SizedBox(
-            height: size.height * .02,
-          ),
-          Container(
-            child: Form(
-              key: _form,
-              child: Column(
-                children: [
-                  Container(
-                    width: size.width * .7,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColorLight,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: TextFormField(
-                      textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(
-                          icon: Icon(
-                            Icons.person,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          hintText: 'Username',
-                          border: InputBorder.none),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Please enter the username';
-                        } else if (value.length < 6) {
-                          return 'Username must be 6 character or above';
-                        }
-                      },
-                      onChanged: (value) {
-                        _authData['username'] = value;
-                      },
-                    ),
+          // SizedBox(
+          //   height: size.height * .0,
+          // ),
+          Form(
+            key: _form,
+            child: Column(
+              children: [
+                Container(
+                  width: size.width * .7,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColorLight,
+                    borderRadius: BorderRadius.circular(30),
                   ),
-                  SizedBox(
-                    height: size.height * .02,
+                  child: TextFormField(
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.next,
+                    decoration: inputDecoration,
+                    validator: (String value) {
+                      if (value.isEmpty) {
+                        return 'Please enter the username';
+                      } else if (value.length < 3) {
+                        return 'Username must be 3 character or above';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      _authData['email'] = value;
+                    },
                   ),
-                  Container(
-                    width: size.width * .7,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColorLight,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: TextFormField(
-                      obscureText: iconPassword,
-                      textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(
-                          icon: Icon(
-                            Icons.lock,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          suffixIcon: InkWell(
-                            onTap: passwordVisibility,
-                            child: iconPassword
-                                ? Icon(
-                                    Icons.visibility_off,
-                                    color: Theme.of(context).primaryColor,
-                                  )
-                                : Icon(
-                                    Icons.visibility,
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                          ),
-                          hintText: 'Password',
-                          border: InputBorder.none),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Please enter the password';
-                        } else if (value.length < 6) {
-                          return 'Incorrect password';
-                        }
-                      },
-                      onChanged: (value) {
-                        _authData['password'] = value;
-                      },
-                    ),
+                ),
+                SizedBox(
+                  height: size.height * .02,
+                ),
+                Container(
+                  width: size.width * .7,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColorLight,
+                    borderRadius: BorderRadius.circular(30),
                   ),
-                ],
-              ),
+                  child: TextFormField(
+                    obscureText: iconPassword,
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.done,
+                    decoration: InputDecoration(
+                        icon: Icon(
+                          Icons.lock,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        suffixIcon: InkWell(
+                          onTap: passwordVisibility,
+                          child: iconPassword
+                              ? Icon(
+                                  Icons.visibility_off,
+                                  color: Theme.of(context).primaryColor,
+                                )
+                              : Icon(
+                                  Icons.visibility,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                        ),
+                        hintText: 'Password',
+                        border: InputBorder.none),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter the password';
+                      } else if (value.length < 6) {
+                        return 'Incorrect password';
+                      }
+                    },
+                    onChanged: (value) {
+                      _authData['password'] = value;
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
+
           SizedBox(
-            height: size.height * .01,
+            height: size.height * .03,
           ),
           Container(
             width: size.width * .5,
-            height: size.height * .08,
-            padding: EdgeInsets.all(9),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(45),
-              child: FlatButton(
-                color: Theme.of(context).primaryColor,
-                onPressed: () {
-                  if (_form.currentState.validate()) {
-                    print(_authData);
-                    onSubmit(context);
-                  }
-                },
+            height: size.height * .06,
+            //color: Colors.red,
+            padding: const EdgeInsets.all(0),
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(50),
+              ),
+              textColor: Colors.white,
+              padding: const EdgeInsets.all(0),
+              onPressed: () {
+                if (_form.currentState.validate()) {
+                  //print(_authData);
+                  _onSubmit(context);
+                }
+              },
+              child: Container(
+                alignment: Alignment.center,
+                height: 50.0,
+                decoration: new BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    gradient: new LinearGradient(colors: [
+                      Color.fromARGB(180, 10, 140, 255),
+                      Color.fromARGB(60, 5, 160, 255),
+                      //Color.fromARGB(0, 0, 0, 0)
+                    ])),
+                //padding: const EdgeInsets.all(),
                 child: Text(
                   'LOGIN',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
+            // child: ClipRRect(
+            //   borderRadius: BorderRadius.circular(45),
+            //   child: FlatButton(
+            //     color: Theme.of(context).primaryColor,
+            //     onPressed: () {
+            //       if (_form.currentState.validate()) {
+            //         //print(_authData);
+            //         _onSubmit(context);
+            //       }
+            //     },
+            //     child: Text(
+            //       'LOGIN',
+            //       style: TextStyle(
+            //           fontSize: 15,
+            //           fontWeight: FontWeight.bold,
+            //           color: Colors.white),
+            //     ),
+            //   ),
+            // ),
           ),
         ],
       ),

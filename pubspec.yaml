@@ -24,8 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_barcode_scanner: ^1.0.2
-  http: ^0.13.0
-  dio: ^4.0.0
+  http: ^0.12.0+2
   toast: ^0.1.5
   provider: ^5.0.0
 

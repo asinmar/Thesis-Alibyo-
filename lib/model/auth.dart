@@ -1,53 +1,66 @@
 import 'dart:convert';
 
-import 'package:alibyo_qr_scanner/model/http_exception.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:flutter/widgets.dart';
+import '../model/http_exception.dart';
 
-class Auth {
-  // String _token;
-  // DateTime _expiryDate;
-  // String _userId;
-  bool isLogin = false;
+class Auth with ChangeNotifier {
+  String _token;
+  DateTime _expiryDate;
+  int _userId;
 
-  Future<void> login(String username, String password) async {
+  bool get isAuth {
+    return token != null;
+  }
+
+  String get token {
+    if (_expiryDate != null &&
+        _expiryDate.isAfter(DateTime.now()) &&
+        _token != null) {
+      return _token;
+    }
+    return null;
+  }
+
+  Future<void> login(String email, String password) async {
     //isLogin = false;
-    var url = Uri.parse('https://192.168.137.1/api/auth/login');
+    const url = 'http://192.168.6.147:8000/api/auth/login';
     try {
-      final response = await http.post(url,
-          body: json.encode(
-            {
-              "username": username,
-              "password": password,
-              //'returnSecureToken': true,
-            },
-          ),
-          headers: {'Content-type': 'application/json'});
+      final response = await http.post(
+        url,
+        body: json.encode(
+          {
+            "email": email,
+            "password": password,
+            //'returnSecureToken': true,
+          },
+        ),
+        headers: {'Content-type': 'application/json'},
+      );
       print(json.decode(response.body));
-      //final responseData = json.decode(response.body);
-      //var token = responseData['idToken'];
-      if (200 == response.statusCode) {
-        //return responseData;
 
-        isLogin = true;
-        print(response.body.toString());
-        return;
-      } else {
-        return 'error';
+      // if (200 == response.statusCode) {
+      //   //isLogin = true;
+      //   print(response.body.toString());
+      // } else {
+      //   return 'error';
+      // }
+      final responseData = json.decode(response.body);
+      if (responseData['error'] != null) {
+        throw HttpException(responseData['error']);
       }
-
-      //print("login na");
-      // } else {
-      //   print(responseData.statusCode.toString());
-      // }
-      // if (responseData['error'] != null) {
-      //   throw HttpException(responseData['error']['message']);
-      // } else {
-      //   return responseData;
-      // }
+      _token = responseData['access_token'];
+      _userId = responseData['user']['id'];
+      _expiryDate = DateTime.now().add(
+        Duration(days: 7),
+      );
+      notifyListeners();
+      // print(_token);
+      // print(_userId);
+      // print(_expiryDate);
     } catch (error) {
+      print('EROOORRR');
       print(error);
 
       throw (error);
