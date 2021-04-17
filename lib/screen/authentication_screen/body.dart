@@ -1,11 +1,6 @@
-//import 'dart:convert';
-
-//import 'package:alibyo_qr_scanner/model/api.dart';
-//import 'package:alibyo_qr_scanner/model/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-//import 'package:provider/provider.dart';
 
 import './background.dart';
 import '../../model/http_exception.dart';
@@ -55,7 +50,6 @@ class _BodyState extends State<Body> {
 
   Future<void> _onSubmit(BuildContext context) async {
     _form.currentState.save();
-    // try {
     print(_authData['email']);
     print(_authData['password']);
     try {
@@ -74,22 +68,6 @@ class _BodyState extends State<Body> {
           'Could not authenticate you. Please try again later.';
       _showErrorDialog(errorMessage);
     }
-    // var res =
-    //     await Auth().login(_authData['email'], _authData['password']);
-    // //var body = json.decode();
-    //print(body);
-    // if (Auth().null) {
-    //   Navigator.of(context).pushReplacementNamed('/home-screen');
-    // } else {
-    //   print('not login');
-    // }
-
-    // } catch (error) {
-    //   _showDialog(error);
-    //   print(error.toString());
-    //   const errorMessage = 'Could not authenticate you.';
-    //   _showDialog(errorMessage);
-    // }
   }
 
   @override
@@ -105,6 +83,7 @@ class _BodyState extends State<Body> {
     return Background(
       child: Column(
         children: [
+          //Logo
           Container(
             width: size.width * .6,
             height: size.height * .45,
@@ -114,9 +93,6 @@ class _BodyState extends State<Body> {
               fit: BoxFit.fill,
             ),
           ),
-          // SizedBox(
-          //   height: size.height * .0,
-          // ),
           Form(
             key: _form,
             child: Column(
@@ -128,11 +104,13 @@ class _BodyState extends State<Body> {
                     color: Theme.of(context).primaryColorLight,
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  child: TextFormField(
+                  child:
+                      //Username
+                      TextFormField(
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
                     decoration: inputDecoration,
-                    validator: (String value) {
+                    validator: (value) {
                       if (value.isEmpty) {
                         return 'Please enter the username';
                       } else if (value.length < 3) {
@@ -155,7 +133,9 @@ class _BodyState extends State<Body> {
                     color: Theme.of(context).primaryColorLight,
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  child: TextFormField(
+                  child:
+                      //Password
+                      TextFormField(
                     obscureText: iconPassword,
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.done,
@@ -181,7 +161,7 @@ class _BodyState extends State<Body> {
                     validator: (value) {
                       if (value.isEmpty) {
                         return 'Please enter the password';
-                      } else if (value.length < 6) {
+                      } else if (value.length < 3) {
                         return 'Incorrect password';
                       }
                     },
@@ -202,7 +182,9 @@ class _BodyState extends State<Body> {
             height: size.height * .06,
             //color: Colors.red,
             padding: const EdgeInsets.all(0),
-            child: RaisedButton(
+            child:
+                //Botton
+                RaisedButton(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50),
               ),
@@ -222,37 +204,17 @@ class _BodyState extends State<Body> {
                     gradient: new LinearGradient(colors: [
                       Color.fromARGB(180, 10, 140, 255),
                       Color.fromARGB(60, 5, 160, 255),
-                      //Color.fromARGB(0, 0, 0, 0)
                     ])),
-                //padding: const EdgeInsets.all(),
                 child: Text(
                   'LOGIN',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
+                    //color: Colors.black,
                   ),
                 ),
               ),
             ),
-            // child: ClipRRect(
-            //   borderRadius: BorderRadius.circular(45),
-            //   child: FlatButton(
-            //     color: Theme.of(context).primaryColor,
-            //     onPressed: () {
-            //       if (_form.currentState.validate()) {
-            //         //print(_authData);
-            //         _onSubmit(context);
-            //       }
-            //     },
-            //     child: Text(
-            //       'LOGIN',
-            //       style: TextStyle(
-            //           fontSize: 15,
-            //           fontWeight: FontWeight.bold,
-            //           color: Colors.white),
-            //     ),
-            //   ),
-            // ),
           ),
         ],
       ),

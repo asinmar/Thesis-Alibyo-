@@ -1,3 +1,4 @@
+import 'package:alibyo_qr_scanner/model/resident.dart';
 import 'package:flutter/material.dart';
 
 import 'dart:async';
@@ -27,6 +28,8 @@ class _MyHomeState extends State<HomeScreen> {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           'grey', "Cancel", true, ScanMode.QR);
       print(barcodeScanRes);
+      barcodeScanRes = '1';
+      Resident().scanResident(int.parse(barcodeScanRes));
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
     }
@@ -38,11 +41,13 @@ class _MyHomeState extends State<HomeScreen> {
 
     setState(() {
       _scanBarcode = barcodeScanRes;
+      print(_scanBarcode);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
@@ -57,18 +62,55 @@ class _MyHomeState extends State<HomeScreen> {
               direction: Axis.vertical,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                RaisedButton(
-                  onPressed: () => scanQR(),
-                  color: Theme.of(context).primaryColor,
-                  child: Text(
-                    "Start QR scan",
-                    style: TextStyle(color: Colors.white),
+                Container(
+                  width: size.width * .4,
+                  height: size.height * .06,
+                  //color: Colors.red,
+                  padding: const EdgeInsets.all(0),
+                  child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    textColor: Colors.white,
+                    padding: const EdgeInsets.all(0),
+                    onPressed: () => scanQR(),
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 50.0,
+                      decoration: new BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          gradient: new LinearGradient(colors: [
+                            Color.fromARGB(180, 10, 140, 255),
+                            Color.fromARGB(60, 5, 160, 255),
+                          ])),
+                      child: Text(
+                        'Scan Resident',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          //color: Colors.black,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-                Text(
-                  'Scan result : $_scanBarcode\n',
-                  style: TextStyle(fontSize: 20),
+                SizedBox(
+                  height: 10,
                 ),
+                // Text(
+                //   'Unknown QR Code',
+                //   style: TextStyle(
+                //     fontSize: 15,
+                //     color: Colors.red,
+                //   ),
+                // ),
+                // Text(
+                //   'This QR Code is disabled.',
+                //   style: TextStyle(
+                //     fontSize: 15,
+                //     color: Colors.red,
+                //   ),
+                // ),
               ],
             ),
           );

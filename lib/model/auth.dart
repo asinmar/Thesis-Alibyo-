@@ -25,7 +25,7 @@ class Auth with ChangeNotifier {
 
   Future<void> login(String email, String password) async {
     //isLogin = false;
-    const url = 'http://192.168.6.147:8000/api/auth/login';
+    const url = 'http://127.0.0.1:8000/api/auth/login';
     try {
       final response = await http.post(
         url,
@@ -50,15 +50,20 @@ class Auth with ChangeNotifier {
       if (responseData['error'] != null) {
         throw HttpException(responseData['error']);
       }
+      // else if (){
+
+      // }
       _token = responseData['access_token'];
       _userId = responseData['user']['id'];
       _expiryDate = DateTime.now().add(
-        Duration(days: 7),
+        Duration(
+          days: 7,
+        ),
       );
+      print(_token);
+      print(_userId);
+      print(_expiryDate);
       notifyListeners();
-      // print(_token);
-      // print(_userId);
-      // print(_expiryDate);
     } catch (error) {
       print('EROOORRR');
       print(error);
