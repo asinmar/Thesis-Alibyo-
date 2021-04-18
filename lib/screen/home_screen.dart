@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:alibyo_qr_scanner/model/resident.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import 'dart:async';
 import 'package:flutter/services.dart';
@@ -21,6 +25,35 @@ class _MyHomeState extends State<HomeScreen> {
     super.initState();
   }
 
+  // Future<void> scanResident() async {
+  //   //isLogin = false;
+  //   final url = 'http://192.168.1.13:8000/api/resident';
+  //   try {
+  //     final response = await http.get(
+  //       url,
+  //     );
+  //     if (response.statusCode == 200) {
+  //       final responseData = json.decode(response.body);
+  //       print(responseData);
+  //     }
+  //     // print(json.decode(response.body));
+
+  //     // final responseData = json.decode(response.body);
+  //     // if (responseData['error'] != null) {
+  //     //   throw HttpException(responseData['error']);
+  //     // }
+  //     // else if (){
+
+  //     // }
+
+  //   } catch (error) {
+  //     print('EROOORRR');
+  //     print(error);
+
+  //     throw (error);
+  //   }
+  // }
+
   Future<void> scanQR() async {
     String barcodeScanRes;
     // Platform messages may fail, so we use a try/catch PlatformException.
@@ -28,8 +61,8 @@ class _MyHomeState extends State<HomeScreen> {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           'grey', "Cancel", true, ScanMode.QR);
       print(barcodeScanRes);
-      barcodeScanRes = '1';
-      Resident().scanResident(int.parse(barcodeScanRes));
+      // barcodeScanRes = '1';
+      // Resident().scanResident(int.parse(barcodeScanRes));
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
     }
@@ -38,6 +71,15 @@ class _MyHomeState extends State<HomeScreen> {
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
     if (!mounted) return;
+
+    try {
+      await Resident().scanResident(
+        int.parse(barcodeScanRes),
+      );
+      Navigator.of(context).pushNamed(HomeScreen.routeName);
+    } catch (error) {
+      print(error);
+    }
 
     setState(() {
       _scanBarcode = barcodeScanRes;
@@ -73,7 +115,7 @@ class _MyHomeState extends State<HomeScreen> {
                     ),
                     textColor: Colors.white,
                     padding: const EdgeInsets.all(0),
-                    onPressed: () => scanQR(),
+                    onPressed: scanQR,
                     child: Container(
                       alignment: Alignment.center,
                       height: 50.0,

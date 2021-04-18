@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../home_screen.dart';
 import './background.dart';
 import '../../model/http_exception.dart';
 import '../../model/auth.dart';
@@ -57,6 +58,7 @@ class _BodyState extends State<Body> {
         _authData['email'],
         _authData['password'],
       );
+      Navigator.of(context).pushNamed(HomeScreen.routeName);
     } on HttpException catch (error) {
       var errorMessage = 'Authentication failed';
       if (error.toString().contains('Unauthorized')) {

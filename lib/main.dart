@@ -32,8 +32,9 @@ class MyApp extends StatelessWidget {
               accentColor: Colors.cyanAccent,
               scaffoldBackgroundColor: Colors.white,
             ),
-            home: auth.isAuth ? HomeScreen() : MyMainPage(),
+            home: !auth.isAuth ? HomeScreen() : MyMainPage(),
             routes: {
+              MyMainPage.routeName: (ctx) => MyMainPage(),
               HomeScreen.routeName: (ctx) => HomeScreen(),
               ChangePasswordScreen.routeName: (ctx) => ChangePasswordScreen(),
             },
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyMainPage extends StatelessWidget {
+  static const routeName = '/auth';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
