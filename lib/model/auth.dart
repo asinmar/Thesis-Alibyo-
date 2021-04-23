@@ -6,63 +6,37 @@ import 'package:http/http.dart' as http;
 import '../model/http_exception.dart';
 
 class Auth with ChangeNotifier {
-  String _token;
-  DateTime _expiryDate;
-  int _userId;
-
-  bool get isAuth {
-    return token != null;
-  }
-
-  String get token {
-    if (_expiryDate != null &&
-        _expiryDate.isAfter(DateTime.now()) &&
-        _token != null) {
-      return _token;
-    }
-    return null;
-  }
-
-  Future<void> login(String email, String password) async {
-    //isLogin = false;
-    const url = 'http://127.0.0.1:8000/api/auth/login';
+  var isLoggedIn = false;
+  Future<void> login(
+    String username,
+    String password,
+  ) async {
+    print('here');
+    print(username);
+    print(password);
+    const url = 'http://192.168.43.201:8000/log';
     try {
       final response = await http.post(
         url,
         body: json.encode(
           {
-            "email": email,
+            "username": username,
             "password": password,
-            //'returnSecureToken': true,
           },
         ),
         headers: {'Content-type': 'application/json'},
       );
+      print('send');
       print(json.decode(response.body));
+      isLoggedIn = true;
+      // final responseData = json.decode(response.body);
 
-      // if (200 == response.statusCode) {
-      //   //isLogin = true;
-      //   print(response.body.toString());
+      // if (responseData['error'] != null) {
+      //   throw HttpException(responseData['error']);
       // } else {
-      //   return 'error';
+      //   isLoggedIn = true;
       // }
-      final responseData = json.decode(response.body);
-      if (responseData['error'] != null) {
-        throw HttpException(responseData['error']);
-      }
-      // else if (){
 
-      // }
-      _token = responseData['access_token'];
-      _userId = responseData['user']['id'];
-      _expiryDate = DateTime.now().add(
-        Duration(
-          days: 7,
-        ),
-      );
-      print(_token);
-      print(_userId);
-      print(_expiryDate);
       notifyListeners();
     } catch (error) {
       print('EROOORRR');

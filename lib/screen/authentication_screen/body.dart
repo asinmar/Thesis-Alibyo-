@@ -1,8 +1,10 @@
+//import 'package:alibyo_qr_scanner/screen/qr_scanner_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../home_screen.dart';
+import '../resident_scanner_screen.dart';
 import './background.dart';
 import '../../model/http_exception.dart';
 import '../../model/auth.dart';
@@ -13,8 +15,8 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  Map<String, String> _authData = {
-    'email': '',
+  Map<String, String> authData = {
+    'username': '',
     'password': '',
   };
   final _form = GlobalKey<FormState>();
@@ -34,29 +36,31 @@ class _BodyState extends State<Body> {
 
   void _showErrorDialog(String message) {
     showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-              title: Text('An error Occured!'),
-              content: Text(message),
-              actions: [
-                FlatButton(
-                  child: Text('Okay'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            ));
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('An error Occured!'),
+        content: Text(message),
+        actions: [
+          FlatButton(
+            child: Text('Okay'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _onSubmit(BuildContext context) async {
     _form.currentState.save();
-    print(_authData['email']);
-    print(_authData['password']);
+    print(authData['username']);
+    print(authData['password']);
+
     try {
       await Provider.of<Auth>(context, listen: false).login(
-        _authData['email'],
-        _authData['password'],
+        authData['username'],
+        authData['password'],
       );
       Navigator.of(context).pushNamed(HomeScreen.routeName);
     } on HttpException catch (error) {
@@ -87,14 +91,15 @@ class _BodyState extends State<Body> {
         children: [
           //Logo
           Container(
-            width: size.width * .6,
-            height: size.height * .45,
-            padding: EdgeInsets.fromLTRB(0, 120, 0, 0),
+            width: size.width * .45,
+            height: size.height * .35,
+            padding: EdgeInsets.only(top: size.height * .18),
             child: Image.asset(
               'assets/images/alibyo_logo.png',
               fit: BoxFit.fill,
             ),
           ),
+          SizedBox(height: size.height * .05),
           Form(
             key: _form,
             child: Column(
@@ -121,7 +126,7 @@ class _BodyState extends State<Body> {
                       return null;
                     },
                     onChanged: (value) {
-                      _authData['email'] = value;
+                      authData['username'] = value;
                     },
                   ),
                 ),
@@ -168,21 +173,19 @@ class _BodyState extends State<Body> {
                       }
                     },
                     onChanged: (value) {
-                      _authData['password'] = value;
+                      authData['password'] = value;
                     },
                   ),
                 ),
               ],
             ),
           ),
-
           SizedBox(
             height: size.height * .03,
           ),
           Container(
             width: size.width * .5,
             height: size.height * .06,
-            //color: Colors.red,
             padding: const EdgeInsets.all(0),
             child:
                 //Botton
@@ -204,7 +207,7 @@ class _BodyState extends State<Body> {
                 decoration: new BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
                     gradient: new LinearGradient(colors: [
-                      Color.fromARGB(180, 10, 140, 255),
+                      Color.fromARGB(255, 10, 140, 255),
                       Color.fromARGB(60, 5, 160, 255),
                     ])),
                 child: Text(

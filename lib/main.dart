@@ -1,8 +1,9 @@
-//123456import 'dart:html';
-// import 'dart:io';
-// import 'package:alibyo_qr_scanner/model/authen.dart';
-
 import 'package:alibyo_qr_scanner/model/auth.dart';
+//import 'package:alibyo_qr_scanner/screen/qr_scanner_screen.dart';
+import 'package:alibyo_qr_scanner/screen/record_relief_screen.dart';
+import 'package:alibyo_qr_scanner/screen/relief_scanner_screen.dart';
+import 'package:alibyo_qr_scanner/screen/resident_scanner_screen.dart';
+import 'package:alibyo_qr_scanner/screen/resident_screen.dart';
 import 'package:provider/provider.dart';
 
 import './screen/change_password_screen.dart';
@@ -32,11 +33,15 @@ class MyApp extends StatelessWidget {
               accentColor: Colors.cyanAccent,
               scaffoldBackgroundColor: Colors.white,
             ),
-            home: !auth.isAuth ? HomeScreen() : MyMainPage(),
+            home: auth.isLoggedIn ? HomeScreen() : MyMainPage(),
             routes: {
               MyMainPage.routeName: (ctx) => MyMainPage(),
               HomeScreen.routeName: (ctx) => HomeScreen(),
+              ResidentScannerScreen.routeName: (ctx) => ResidentScannerScreen(),
+              ReliefScannerScreen.routeName: (ctx) => ReliefScannerScreen(),
               ChangePasswordScreen.routeName: (ctx) => ChangePasswordScreen(),
+              ResidentScreen.routeName: (ctx) => ResidentScreen(),
+              RecordReliefScreen.routeName: (ctx) => RecordReliefScreen(),
             },
           ),
         ));

@@ -3,25 +3,26 @@ import 'package:flutter/material.dart';
 
 void _showChangePassDialog(BuildContext context) {
   showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-            title: Text('Change Password'),
-            content: Text('Are you sure you want to change the password?'),
-            actions: [
-              FlatButton(
-                child: Text('Yes'),
-                onPressed: () {
-                  Navigator.of(context).popAndPushNamed(HomeScreen.routeName);
-                },
-              ),
-              FlatButton(
-                child: Text('No'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ));
+    context: context,
+    builder: (ctx) => AlertDialog(
+      title: Text('Change Password'),
+      content: Text('Are you sure you want to change the password?'),
+      actions: [
+        FlatButton(
+          child: Text('Yes'),
+          onPressed: () {
+            //Navigator.of(context).popAndPushNamed(HomeScreen.routeName);
+          },
+        ),
+        FlatButton(
+          child: Text('No'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    ),
+  );
 }
 
 class ChangePasswordScreen extends StatelessWidget {
