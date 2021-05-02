@@ -29,12 +29,16 @@ class _ResidentScreenState extends State<ResidentScreen> {
 
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Resident'),
+      ),
+      drawer: Drawer(),
       body: Container(
         alignment: Alignment.center,
         child: Column(
           children: [
             SizedBox(
-              height: size.height * .2,
+              height: size.height * .12,
             ),
             Container(
               width: size.width * .3,
@@ -102,6 +106,7 @@ class _ResidentScreenState extends State<ResidentScreen> {
                             ],
                           ),
                           Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                   '$residentName, $residentFName $residentMName'),
@@ -139,9 +144,9 @@ class _ResidentScreenState extends State<ResidentScreen> {
                           textColor: Colors.white,
                           padding: const EdgeInsets.all(0),
                           onPressed: () {
-                            Navigator.of(context).popAndPushNamed(
-                                ResidentScannerScreen.routeName,
-                                arguments: residentId);
+                            Navigator.of(context).pop(
+                              ResidentScannerScreen.routeName,
+                            );
                           },
                           child: Container(
                             width: size.width * .4,

@@ -1,7 +1,41 @@
-import 'package:alibyo_qr_scanner/screen/home_screen.dart';
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-void _showChangePassDialog(BuildContext context) {
+import 'package:alibyo_qr_scanner/model/auth.dart';
+import 'package:alibyo_qr_scanner/screen/authentication_screen/body.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import '../screen/authentication_screen/body.dart';
+import '../main.dart';
+
+Future<void> _onChange(disId, newPass, BuildContext context) async {
+  _form.currentState.save();
+  //final String resId = Provider.of<Auth>(context, listen: false).login(distributorId, username, password);
+  print('here');
+  print(newPass);
+  //print(resId);
+  final url =
+      'http://murmuring-plains-43014.herokuapp.com/distributor_change_pass';
+  try {
+    final response = await http.put(url,
+        body: json.encode({
+          "distributor_id": disId,
+          "password": newPass,
+        }),
+        headers: {'Content-type': 'application/json'});
+    print('there');
+    //final responseData = json.decode(response.body) as Map<String, dynamic>;
+
+    print(json.encode(response.body));
+    Navigator.of(context).popAndPushNamed(MyMainPage.routeName);
+  } catch (error) {
+    print('yatiiii');
+    print(error);
+    throw (error);
+  }
+}
+
+void _showChangePassDialog(disId, newPass, BuildContext context) {
   showDialog(
     context: context,
     builder: (ctx) => AlertDialog(
@@ -9,26 +43,34 @@ void _showChangePassDialog(BuildContext context) {
       content: Text('Are you sure you want to change the password?'),
       actions: [
         FlatButton(
-          child: Text('Yes'),
-          onPressed: () {
-            //Navigator.of(context).popAndPushNamed(HomeScreen.routeName);
-          },
+          child: Text('No'),
+          onPressed: () => {Navigator.of(context).pop()},
         ),
         FlatButton(
-          child: Text('No'),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          child: Text('Yes'),
+          onPressed: () => {_onChange(disId, newPass, context)},
         ),
       ],
     ),
   );
 }
 
-class ChangePasswordScreen extends StatelessWidget {
+final TextEditingController _pass = TextEditingController();
+
+final GlobalKey<FormState> _form = GlobalKey<FormState>();
+
+class ChangePasswordScreen extends StatefulWidget {
   static const routeName = '/change-password-srceen';
+
+  @override
+  _ChangePasswordScreenState createState() => _ChangePasswordScreenState();
+}
+
+class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
+  String newPass;
   @override
   Widget build(BuildContext context) {
+    final disId = ModalRoute.of(context).settings.arguments as String;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
@@ -89,22 +131,42 @@ class ChangePasswordScreen extends StatelessWidget {
                       SizedBox(
                         height: 20,
                       ),
-                      TextField(
-                        obscureText: true,
-                        style: TextStyle(color: Colors.blue),
-                        decoration: InputDecoration(
-                          labelText: 'New Password',
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                        obscureText: true,
-                        style: TextStyle(color: Colors.blue),
-                        decoration: InputDecoration(
-                          labelText: 'Confirm New Password',
-                        ),
+                      Form(
+                        key: _form,
+                        child: Column(children: <Widget>[
+                          TextFormField(
+                              obscureText: true,
+                              style: TextStyle(color: Colors.blue),
+                              decoration: InputDecoration(
+                                labelText: 'New Password',
+                              ),
+                              controller: _pass,
+                              validator: (val) {
+                                if (val.isEmpty) return 'Empty';
+                                return null;
+                              }),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            obscureText: true,
+                            style: TextStyle(color: Colors.blue),
+                            decoration: InputDecoration(
+                              labelText: 'Confirm New Password',
+                            ),
+                            //controller: _confirmPass,
+                            validator: (val) {
+                              if (val.isEmpty) return 'Empty';
+                              if (val != _pass.text) return 'Not Match';
+
+                              return null;
+                              //onChanged: newPass = value.toString(),),
+                            },
+                            onChanged: (val) {
+                              newPass = val;
+                            },
+                          )
+                        ]),
                       ),
                       SizedBox(
                         height: 40,
@@ -115,7 +177,11 @@ class ChangePasswordScreen extends StatelessWidget {
                         ),
                         textColor: Colors.white,
                         padding: const EdgeInsets.all(0),
-                        onPressed: () => _showChangePassDialog(context),
+                        onPressed: () {
+                          if (_form.currentState.validate()) {
+                            _showChangePassDialog(disId, newPass, context);
+                          }
+                        },
                         child: Container(
                           width: 150,
                           alignment: Alignment.center,

@@ -23,7 +23,7 @@ String reliefDesc;
 Future<void> scanRelief(qr, resId, residentPurok, residentMName, residentFName,
     residentName, BuildContext context) async {
   // static Future<List<Residentt>> scanResident(int qr) async {
-  final url = 'http://192.168.43.201:8000/relief_qr/$qr';
+  final url = 'http://murmuring-plains-43014.herokuapp.com/relief_qr/$qr';
   try {
     final response = await http.get(
       url,
@@ -70,6 +70,7 @@ class _ReliefScannerScreenState extends State<ReliefScannerScreen> {
   QRViewController _controller;
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     final residentData =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     final residentId = residentData['res_id'];
@@ -83,7 +84,7 @@ class _ReliefScannerScreenState extends State<ReliefScannerScreen> {
         backgroundColor: Theme.of(context).primaryColor,
         title: Text('Alibyo'),
       ),
-      drawer: HomeDrawer(),
+      //drawer: HomeDrawer(),
       body: Stack(
         children: [
           QRView(
@@ -108,13 +109,14 @@ class _ReliefScannerScreenState extends State<ReliefScannerScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Container(
-              margin: EdgeInsets.only(top: 60),
+              margin: EdgeInsets.only(top: size.height * .13),
               child: Text(
                 'Scan Relief',
                 style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue.shade300,
+                ),
               ),
             ),
           ),

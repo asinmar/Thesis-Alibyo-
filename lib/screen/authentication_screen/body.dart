@@ -16,6 +16,7 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   Map<String, String> authData = {
+    'id': '',
     'username': '',
     'password': '',
   };
@@ -54,15 +55,21 @@ class _BodyState extends State<Body> {
 
   Future<void> _onSubmit(BuildContext context) async {
     _form.currentState.save();
-    print(authData['username']);
-    print(authData['password']);
 
     try {
       await Provider.of<Auth>(context, listen: false).login(
+        authData['id'],
         authData['username'],
         authData['password'],
+        context,
       );
-      Navigator.of(context).pushNamed(HomeScreen.routeName);
+
+      // Navigator.of(context).pushNamed(HomeScreen.routeName);
+      //  Navigator.push(
+      // context,
+      // MaterialPageRoute(builder: (context) =>
+      //   HomeScreen(_authData)),
+      //);
     } on HttpException catch (error) {
       var errorMessage = 'Authentication failed';
       if (error.toString().contains('Unauthorized')) {

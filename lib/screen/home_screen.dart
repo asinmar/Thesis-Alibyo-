@@ -8,16 +8,20 @@ class HomeScreen extends StatefulWidget {
   _MyHomeState createState() => _MyHomeState();
 }
 
+//String dis_Id;
+
 class _MyHomeState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final disId = ModalRoute.of(context).settings.arguments as String;
+    //dis_Id = disId;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: Text('Alibyo'),
       ),
-      drawer: HomeDrawer(),
+      drawer: HomeDrawer(disId),
       body: Builder(
         builder: (BuildContext context) {
           return Container(
@@ -31,6 +35,33 @@ class _MyHomeState extends State<HomeScreen> {
                   height: size.height * .06,
                   //color: Colors.red,
                   padding: const EdgeInsets.all(0),
+                  // child: RaisedButton(
+                  //   shape: RoundedRectangleBorder(
+                  //     borderRadius: BorderRadius.circular(50),
+                  //   ),
+                  //   textColor: Colors.white,
+                  //   padding: const EdgeInsets.all(0),
+                  //   onPressed: () => (Navigator.of(context)
+                  //       .pushNamed(ResidentScannerScreen.routeName)),
+                  //   child: Container(
+                  //     alignment: Alignment.center,
+                  //     height: 50.0,
+                  //     decoration: new BoxDecoration(
+                  //         borderRadius: BorderRadius.circular(50),
+                  //         gradient: new LinearGradient(colors: [
+                  //           Color.fromARGB(255, 10, 140, 255),
+                  //           Color.fromARGB(60, 5, 160, 255),
+                  //         ])),
+                  //     child: Text(
+                  //       'Scan Resident',
+                  //       textAlign: TextAlign.center,
+                  //       style: TextStyle(
+                  //         fontWeight: FontWeight.bold,
+                  //         //color: Colors.black,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   child: RaisedButton(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50),
@@ -40,21 +71,31 @@ class _MyHomeState extends State<HomeScreen> {
                     onPressed: () => (Navigator.of(context)
                         .pushNamed(ResidentScannerScreen.routeName)),
                     child: Container(
+                      width: size.width * .4,
                       alignment: Alignment.center,
-                      height: 50.0,
+                      height: size.height * .06,
                       decoration: new BoxDecoration(
                           borderRadius: BorderRadius.circular(50),
                           gradient: new LinearGradient(colors: [
                             Color.fromARGB(255, 10, 140, 255),
                             Color.fromARGB(60, 5, 160, 255),
                           ])),
-                      child: Text(
-                        'Scan Resident',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          //color: Colors.black,
-                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Icon(
+                            Icons.camera_enhance,
+                            color: Colors.black54,
+                          ),
+                          Text(
+                            'Scan Resident',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              //color: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

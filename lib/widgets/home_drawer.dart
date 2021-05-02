@@ -9,6 +9,8 @@ import '../model/auth.dart';
 //import '../screen/authentication_screen/body.dart' as bod;
 
 class HomeDrawer extends StatelessWidget {
+  final String disId;
+  HomeDrawer(this.disId);
   Widget buildListTile(
       String title, IconData icon, Function tapHandler, BuildContext context) {
     return ListTile(
@@ -35,15 +37,15 @@ class HomeDrawer extends StatelessWidget {
               content: Text('Are you sure you want to logout?'),
               actions: [
                 FlatButton(
-                  child: Text('Yes'),
-                  onPressed: () {
-                    Navigator.of(context).popAndPushNamed(MyMainPage.routeName);
-                  },
-                ),
-                FlatButton(
                   child: Text('No'),
                   onPressed: () {
                     Navigator.of(context).pop();
+                  },
+                ),
+                FlatButton(
+                  child: Text('Yes'),
+                  onPressed: () {
+                    Navigator.of(context).popAndPushNamed(MyMainPage.routeName);
                   },
                 ),
               ],
@@ -75,7 +77,7 @@ class HomeDrawer extends StatelessWidget {
             'Home',
             Icons.home,
             () {
-              //Navigator.of(context).pushNamed(HomeScreen.routeName);
+              Navigator.of(context).pushNamed(HomeScreen.routeName);
             },
             context,
           ),
@@ -84,7 +86,8 @@ class HomeDrawer extends StatelessWidget {
             'Change Password',
             Icons.security,
             () {
-              Navigator.of(context).pushNamed(ChangePasswordScreen.routeName);
+              Navigator.of(context)
+                  .pushNamed(ChangePasswordScreen.routeName, arguments: disId);
             },
             context,
           ),

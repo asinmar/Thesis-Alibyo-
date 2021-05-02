@@ -20,7 +20,7 @@ String residentName;
 String residentStatus;
 
 Future<void> scanResident(qr, BuildContext context) async {
-  final url = 'http://192.168.43.201:8000/scanned_qr/$qr';
+  final url = 'http://murmuring-plains-43014.herokuapp.com/scanned_qr/$qr';
   try {
     final response = await http.get(
       url,
@@ -49,7 +49,6 @@ Future<void> scanResident(qr, BuildContext context) async {
       "res_purok": residentPurok,
     });
   } catch (error) {
-    print('yatiiii');
     print(error);
     throw (error);
   }
@@ -63,6 +62,7 @@ class _ResidentScannerScreenState extends State<ResidentScannerScreen> {
   QRViewController _controller;
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Stack(
         children: [
@@ -87,13 +87,14 @@ class _ResidentScannerScreenState extends State<ResidentScannerScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Container(
-              margin: EdgeInsets.only(top: 60),
+              margin: EdgeInsets.only(top: size.height * .13),
               child: Text(
                 'Scan Resident',
                 style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue.shade300,
+                ),
               ),
             ),
           ),

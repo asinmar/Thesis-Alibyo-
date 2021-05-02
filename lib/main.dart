@@ -1,5 +1,4 @@
 import 'package:alibyo_qr_scanner/model/auth.dart';
-//import 'package:alibyo_qr_scanner/screen/qr_scanner_screen.dart';
 import 'package:alibyo_qr_scanner/screen/record_relief_screen.dart';
 import 'package:alibyo_qr_scanner/screen/relief_scanner_screen.dart';
 import 'package:alibyo_qr_scanner/screen/resident_scanner_screen.dart';
@@ -10,7 +9,7 @@ import './screen/change_password_screen.dart';
 import './screen/home_screen.dart';
 
 import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
+
 import './screen/authentication_screen/body.dart';
 
 void main() => runApp(MyApp());

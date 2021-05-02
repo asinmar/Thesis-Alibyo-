@@ -16,7 +16,7 @@ Future<void> recordRelief(residentId, reliefId, BuildContext context) async {
   print('asasas');
   print(residentId);
   print(reliefId);
-  final url = 'http://192.168.43.201:8000/recieved_relief';
+  final url = 'http://murmuring-plains-43014.herokuapp.com/recieved_relief';
   try {
     final response = await http.put(url,
         body: json.encode({
@@ -80,15 +80,16 @@ class _RecordReliefScreenState extends State<RecordReliefScreen> {
     final reliefDesc = reliefData['relief_description'];
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Resident'),
-      // ),
+      appBar: AppBar(
+        title: Text('Relief'),
+      ),
+      drawer: Drawer(),
       body: Container(
         alignment: Alignment.center,
         child: Column(
           children: [
             SizedBox(
-              height: size.height * .22,
+              height: size.height * .13,
             ),
             Container(
               width: size.width * .3,
@@ -108,7 +109,7 @@ class _RecordReliefScreenState extends State<RecordReliefScreen> {
                   side: BorderSide(color: Colors.blue, width: 1.0),
                 ),
                 child: Container(
-                  height: size.height * .3,
+                  height: size.height * .33,
                   width: size.width * .9,
                   padding: EdgeInsets.all(
                     30,
@@ -141,51 +142,82 @@ class _RecordReliefScreenState extends State<RecordReliefScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(
-                                height: size.height * .01,
+                                height: size.height * .005,
                               ),
-                              Text(
-                                'Name: ',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(
-                                height: size.height * .01,
-                              ),
-                              Text(
-                                'Purok: ',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Name: ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                      '$residentName, $residentFName $residentMName'),
+                                ],
                               ),
                               SizedBox(
                                 height: size.height * .01,
                               ),
-                              Text(
-                                'Relief Desc:  ',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Purok: ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(residentPurok),
+                                ],
+                              ),
+                              SizedBox(
+                                height: size.height * .01,
+                              ),
+                              Column(
+                                children: [
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Relief ',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          //fontSize: 13,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Description: ',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          // fontSize: 13,
+                                        ),
+                                      ),
+                                      Text(reliefDesc),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                          Column(
-                            children: [
-                              SizedBox(
-                                height: size.height * .01,
-                              ),
-                              Text(
-                                  '$residentName, $residentFName $residentMName'),
-                              SizedBox(
-                                height: size.height * .01,
-                              ),
-                              Text(residentPurok),
-                              SizedBox(
-                                height: size.height * .01,
-                              ),
-                              Text(reliefDesc),
-                            ],
-                          ),
+                          // Column(
+                          //   crossAxisAlignment: CrossAxisAlignment.start,
+                          //   children: [
+                          //     SizedBox(
+                          //       height: size.height * .02,
+                          //     ),
+                          //     // Text(
+                          //     //     '$residentName, $residentFName $residentMName'),
+                          //     SizedBox(
+                          //       height: size.height * .01,
+                          //     ),
+                          //     Text(residentPurok),
+                          //     SizedBox(
+                          //       height: size.height * .01,
+                          //     ),
+                          //     Text(reliefDesc),
+                          //   ],
+                          // ),
                         ],
                       ),
                     ],
