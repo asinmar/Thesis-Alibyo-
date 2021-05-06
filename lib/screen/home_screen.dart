@@ -8,13 +8,11 @@ class HomeScreen extends StatefulWidget {
   _MyHomeState createState() => _MyHomeState();
 }
 
-//String dis_Id;
-
 class _MyHomeState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final disId = ModalRoute.of(context).settings.arguments as String;
-    //dis_Id = disId;
+
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -33,43 +31,16 @@ class _MyHomeState extends State<HomeScreen> {
                 Container(
                   width: size.width * .4,
                   height: size.height * .06,
-                  //color: Colors.red,
                   padding: const EdgeInsets.all(0),
-                  // child: RaisedButton(
-                  //   shape: RoundedRectangleBorder(
-                  //     borderRadius: BorderRadius.circular(50),
-                  //   ),
-                  //   textColor: Colors.white,
-                  //   padding: const EdgeInsets.all(0),
-                  //   onPressed: () => (Navigator.of(context)
-                  //       .pushNamed(ResidentScannerScreen.routeName)),
-                  //   child: Container(
-                  //     alignment: Alignment.center,
-                  //     height: 50.0,
-                  //     decoration: new BoxDecoration(
-                  //         borderRadius: BorderRadius.circular(50),
-                  //         gradient: new LinearGradient(colors: [
-                  //           Color.fromARGB(255, 10, 140, 255),
-                  //           Color.fromARGB(60, 5, 160, 255),
-                  //         ])),
-                  //     child: Text(
-                  //       'Scan Resident',
-                  //       textAlign: TextAlign.center,
-                  //       style: TextStyle(
-                  //         fontWeight: FontWeight.bold,
-                  //         //color: Colors.black,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                   child: RaisedButton(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50),
                     ),
                     textColor: Colors.white,
                     padding: const EdgeInsets.all(0),
-                    onPressed: () => (Navigator.of(context)
-                        .pushNamed(ResidentScannerScreen.routeName)),
+                    onPressed: () => (Navigator.of(context).pushNamed(
+                        ResidentScannerScreen.routeName,
+                        arguments: disId)),
                     child: Container(
                       width: size.width * .4,
                       alignment: Alignment.center,
@@ -92,7 +63,6 @@ class _MyHomeState extends State<HomeScreen> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              //color: Colors.black,
                             ),
                           ),
                         ],
@@ -103,20 +73,6 @@ class _MyHomeState extends State<HomeScreen> {
                 SizedBox(
                   height: 10,
                 ),
-                // Text(
-                //   'Unknown QR Code',
-                //   style: TextStyle(
-                //     fontSize: 15,
-                //     color: Colors.red,
-                //   ),
-                // ),
-                // Text(
-                //   'This QR Code is disabled.',
-                //   style: TextStyle(
-                //     fontSize: 15,
-                //     color: Colors.red,
-                //   ),
-                // ),
               ],
             ),
           );

@@ -1,12 +1,8 @@
-//import 'package:alibyo_qr_scanner/model/user.dart';
-import 'package:alibyo_qr_scanner/screen/authentication_screen/body.dart';
 import 'package:flutter/material.dart';
 
 import '../main.dart';
 import '../screen/home_screen.dart';
 import '../screen/change_password_screen.dart';
-import '../model/auth.dart';
-//import '../screen/authentication_screen/body.dart' as bod;
 
 class HomeDrawer extends StatelessWidget {
   final String disId;
@@ -26,8 +22,6 @@ class HomeDrawer extends StatelessWidget {
       onTap: tapHandler,
     );
   }
-
-  var auth = Auth();
 
   void _showLogoutDialog(BuildContext context) {
     showDialog(

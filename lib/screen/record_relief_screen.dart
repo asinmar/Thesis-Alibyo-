@@ -1,6 +1,5 @@
 import 'dart:convert';
-import 'package:alibyo_qr_scanner/screen/relief_scanner_screen.dart';
-import 'package:alibyo_qr_scanner/screen/resident_scanner_screen.dart';
+import 'package:alibyo_qr_scanner/widgets/home_drawer.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
@@ -13,7 +12,6 @@ class RecordReliefScreen extends StatefulWidget {
 }
 
 Future<void> recordRelief(residentId, reliefId, BuildContext context) async {
-  print('asasas');
   print(residentId);
   print(reliefId);
   final url = 'http://murmuring-plains-43014.herokuapp.com/recieved_relief';
@@ -27,15 +25,10 @@ Future<void> recordRelief(residentId, reliefId, BuildContext context) async {
     print('sddsds');
     print(response.body);
 
-    //final responseData = json.decode(response.body) as Map<String, dynamic>;
-    // if (responseData == null) {
-    //   return;
-    // }
     print(response.body);
 
     Navigator.of(context).pushNamed(HomeScreen.routeName);
   } catch (error) {
-    print('yatiiii');
     print(error);
     throw (error);
   }
@@ -78,12 +71,13 @@ class _RecordReliefScreenState extends State<RecordReliefScreen> {
     final reliefId = reliefData['relief_id'];
     final reliefName = reliefData['relief_name'];
     final reliefDesc = reliefData['relief_description'];
+    final disId = reliefData['dis_id'];
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text('Relief'),
       ),
-      drawer: Drawer(),
+      drawer: HomeDrawer(disId),
       body: Container(
         alignment: Alignment.center,
         child: Column(
@@ -94,7 +88,6 @@ class _RecordReliefScreenState extends State<RecordReliefScreen> {
             Container(
               width: size.width * .3,
               height: size.height * .10,
-              //padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
               child: Image.asset(
                 'assets/images/alibyo_logo.png',
                 fit: BoxFit.fill,
@@ -200,24 +193,6 @@ class _RecordReliefScreenState extends State<RecordReliefScreen> {
                               ),
                             ],
                           ),
-                          // Column(
-                          //   crossAxisAlignment: CrossAxisAlignment.start,
-                          //   children: [
-                          //     SizedBox(
-                          //       height: size.height * .02,
-                          //     ),
-                          //     // Text(
-                          //     //     '$residentName, $residentFName $residentMName'),
-                          //     SizedBox(
-                          //       height: size.height * .01,
-                          //     ),
-                          //     Text(residentPurok),
-                          //     SizedBox(
-                          //       height: size.height * .01,
-                          //     ),
-                          //     Text(reliefDesc),
-                          //   ],
-                          // ),
                         ],
                       ),
                     ],
@@ -253,7 +228,6 @@ class _RecordReliefScreenState extends State<RecordReliefScreen> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      //color: Colors.black,
                     ),
                   ),
                 ),
@@ -262,48 +236,6 @@ class _RecordReliefScreenState extends State<RecordReliefScreen> {
           ],
         ),
       ),
-      // Center(
-      //   child: Column(
-      //     children: [
-      //       Text(reliefName),
-      //       Text(residentId),
-      //       Text(reliefId),
-      //       //Text(res.res[0].status),
-      //       Container(
-      //         width: size.width * .4,
-      //         height: size.height * .06,
-      //         //color: Colors.red,
-      //         padding: const EdgeInsets.all(0),
-      //         child: RaisedButton(
-      //           shape: RoundedRectangleBorder(
-      //             borderRadius: BorderRadius.circular(50),
-      //           ),
-      //           textColor: Colors.white,
-      //           padding: const EdgeInsets.all(0),
-      //           onPressed: () => {recordRelief(residentId, reliefId, context)},
-      //           child: Container(
-      //             alignment: Alignment.center,
-      //             height: 50.0,
-      //             decoration: new BoxDecoration(
-      //                 borderRadius: BorderRadius.circular(50),
-      //                 gradient: new LinearGradient(colors: [
-      //                   Color.fromARGB(255, 10, 140, 255),
-      //                   Color.fromARGB(60, 5, 160, 255),
-      //                 ])),
-      //             child: Text(
-      //               'Recieved Relief',
-      //               textAlign: TextAlign.center,
-      //               style: TextStyle(
-      //                 fontWeight: FontWeight.bold,
-      //                 //color: Colors.black,
-      //               ),
-      //             ),
-      //           ),
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 }

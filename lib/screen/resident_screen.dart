@@ -1,4 +1,5 @@
 import 'package:alibyo_qr_scanner/screen/resident_scanner_screen.dart';
+import 'package:alibyo_qr_scanner/widgets/home_drawer.dart';
 import 'package:flutter/material.dart';
 
 import '../screen/relief_scanner_screen.dart';
@@ -26,13 +27,14 @@ class _ResidentScreenState extends State<ResidentScreen> {
     final residentMName = residentData['res_middle_name'];
     final residentStatus = residentData['res_qrcode_status'];
     final residentPurok = residentData['res_purok'];
+    final disId = residentData['dis_id'];
 
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text('Resident'),
       ),
-      drawer: Drawer(),
+      drawer: HomeDrawer(disId),
       body: Container(
         alignment: Alignment.center,
         child: Column(
@@ -43,7 +45,6 @@ class _ResidentScreenState extends State<ResidentScreen> {
             Container(
               width: size.width * .3,
               height: size.height * .10,
-              //padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
               child: Image.asset(
                 'assets/images/alibyo_logo.png',
                 fit: BoxFit.fill,
@@ -127,8 +128,6 @@ class _ResidentScreenState extends State<ResidentScreen> {
                 ),
               ),
             ),
-
-            //Text(res.res[0].status),
             SizedBox(height: size.height * .04),
             Container(
               alignment: Alignment.topRight,
@@ -170,7 +169,6 @@ class _ResidentScreenState extends State<ResidentScreen> {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    //color: Colors.black,
                                   ),
                                 ),
                               ],
@@ -191,7 +189,8 @@ class _ResidentScreenState extends State<ResidentScreen> {
                                   'res_last_name': residentName,
                                   'res_first_name': residentFName,
                                   'res_middle_name': residentMName,
-                                  'res_purok': residentPurok
+                                  'res_purok': residentPurok,
+                                  'dis_id': disId,
                                 });
                           },
                           child: Container(
@@ -215,7 +214,6 @@ class _ResidentScreenState extends State<ResidentScreen> {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    //color: Colors.black,
                                   ),
                                 ),
                               ],
@@ -272,7 +270,6 @@ class _ResidentScreenState extends State<ResidentScreen> {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      //color: Colors.black,
                                     ),
                                   ),
                                 ],

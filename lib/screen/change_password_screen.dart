@@ -1,19 +1,16 @@
 import 'dart:convert';
 
-import 'package:alibyo_qr_scanner/model/auth.dart';
-import 'package:alibyo_qr_scanner/screen/authentication_screen/body.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
-import '../screen/authentication_screen/body.dart';
+
 import '../main.dart';
 
 Future<void> _onChange(disId, newPass, BuildContext context) async {
   _form.currentState.save();
-  //final String resId = Provider.of<Auth>(context, listen: false).login(distributorId, username, password);
+
   print('here');
   print(newPass);
-  //print(resId);
+
   final url =
       'http://murmuring-plains-43014.herokuapp.com/distributor_change_pass';
   try {
@@ -23,13 +20,10 @@ Future<void> _onChange(disId, newPass, BuildContext context) async {
           "password": newPass,
         }),
         headers: {'Content-type': 'application/json'});
-    print('there');
-    //final responseData = json.decode(response.body) as Map<String, dynamic>;
 
     print(json.encode(response.body));
     Navigator.of(context).popAndPushNamed(MyMainPage.routeName);
   } catch (error) {
-    print('yatiiii');
     print(error);
     throw (error);
   }
@@ -104,18 +98,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               ),
               Card(
                 elevation: 2,
-
                 color: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
-
-                //margin: EdgeInsets.all(40),
                 child: Container(
                   height: size.height * .6,
                   padding:
                       EdgeInsets.only(bottom: 50, top: 50, left: 30, right: 20),
-                  //alignment: Alignment.center,
                   width: size.width * .7,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -154,13 +144,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             decoration: InputDecoration(
                               labelText: 'Confirm New Password',
                             ),
-                            //controller: _confirmPass,
                             validator: (val) {
                               if (val.isEmpty) return 'Empty';
                               if (val != _pass.text) return 'Not Match';
 
                               return null;
-                              //onChanged: newPass = value.toString(),),
                             },
                             onChanged: (val) {
                               newPass = val;

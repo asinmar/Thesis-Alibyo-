@@ -1,10 +1,8 @@
 import 'dart:convert';
 
-//import 'package:alibyo_qr_scanner/screen/record_relief_screen.dart';
 import 'package:alibyo_qr_scanner/screen/resident_screen.dart';
-import 'package:alibyo_qr_scanner/widgets/home_drawer.dart';
+
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-//import 'package:qr_code_scanner/src/qr_scanner_overlay_shape.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -19,7 +17,7 @@ String residentId;
 String residentName;
 String residentStatus;
 
-Future<void> scanResident(qr, BuildContext context) async {
+Future<void> scanResident(qr, BuildContext context, disId) async {
   final url = 'http://murmuring-plains-43014.herokuapp.com/scanned_qr/$qr';
   try {
     final response = await http.get(
@@ -47,6 +45,7 @@ Future<void> scanResident(qr, BuildContext context) async {
       "res_middle_name": residentMName,
       "res_qrcode_status": residentStatus,
       "res_purok": residentPurok,
+      "dis_id": disId,
     });
   } catch (error) {
     print(error);
@@ -62,6 +61,7 @@ class _ResidentScannerScreenState extends State<ResidentScannerScreen> {
   QRViewController _controller;
   @override
   Widget build(BuildContext context) {
+    final disId = ModalRoute.of(context).settings.arguments as String;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Stack(
@@ -79,7 +79,7 @@ class _ResidentScannerScreenState extends State<ResidentScannerScreen> {
               controller.scannedDataStream.listen((val) {
                 if (mounted) {
                   _controller.dispose();
-                  scanResident(val.code, context);
+                  scanResident(val.code, context, disId);
                 }
               });
             },

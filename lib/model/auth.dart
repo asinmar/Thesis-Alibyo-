@@ -16,7 +16,7 @@ class Auth with ChangeNotifier {
     BuildContext context,
   ) async {
     String distributorId;
-    print('here');
+
     print(username);
     print(password);
     const url = 'http://murmuring-plains-43014.herokuapp.com/log';
@@ -39,18 +39,9 @@ class Auth with ChangeNotifier {
       distributorId = responseData['user']['id'].toString();
       print(distributorId);
 
-      // if (responseData['error'] != null) {
-      //   throw HttpException(responseData['error']);
-      // } else {
-      //   isLoggedIn = true;
-      // }
       Navigator.of(context)
           .popAndPushNamed(HomeScreen.routeName, arguments: distributorId);
-      //  Navigator.push(
-      // context,
-      // MaterialPageRoute(builder: (context) =>
-      //   HomeScreen(distributorId)),
-      //);
+
       notifyListeners();
     } catch (error) {
       print('EROOORRR');

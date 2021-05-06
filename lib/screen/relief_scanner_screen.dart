@@ -1,10 +1,7 @@
 import 'dart:convert';
 
 import 'package:alibyo_qr_scanner/screen/record_relief_screen.dart';
-//import 'package:alibyo_qr_scanner/screen/resident_screen.dart';
-import 'package:alibyo_qr_scanner/widgets/home_drawer.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-//import 'package:qr_code_scanner/src/qr_scanner_overlay_shape.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -21,17 +18,14 @@ String reliefName;
 String reliefDesc;
 
 Future<void> scanRelief(qr, resId, residentPurok, residentMName, residentFName,
-    residentName, BuildContext context) async {
-  // static Future<List<Residentt>> scanResident(int qr) async {
+    residentName, BuildContext context, disId) async {
   final url = 'http://murmuring-plains-43014.herokuapp.com/relief_qr/$qr';
   try {
     final response = await http.get(
       url,
     );
     final responseData = json.decode(response.body) as Map<String, dynamic>;
-    // if (responseData == null) {
-    //   return;
-    // }
+
     print(response.body);
 
     print(responseData['relief_id']);
@@ -54,9 +48,9 @@ Future<void> scanRelief(qr, resId, residentPurok, residentMName, residentFName,
       "relief_id": reliefId,
       "relief_name": reliefName,
       "relief_description": reliefDesc,
+      "dis_id": disId,
     });
   } catch (error) {
-    print('yatiiii');
     print(error);
     throw (error);
   }
@@ -78,13 +72,13 @@ class _ReliefScannerScreenState extends State<ReliefScannerScreen> {
     final residentFName = residentData['res_first_name'];
     final residentMName = residentData['res_middle_name'];
     final residentPurok = residentData['res_purok'];
+    final disId = residentData['dis_id'];
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: Text('Alibyo'),
       ),
-      //drawer: HomeDrawer(),
       body: Stack(
         children: [
           QRView(
@@ -101,7 +95,7 @@ class _ReliefScannerScreenState extends State<ReliefScannerScreen> {
                 if (mounted) {
                   _controller.dispose();
                   scanRelief(val.code, residentId, residentPurok, residentMName,
-                      residentFName, residentName, context);
+                      residentFName, residentName, context, disId);
                 }
               });
             },

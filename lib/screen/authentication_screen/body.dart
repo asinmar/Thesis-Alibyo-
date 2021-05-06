@@ -1,10 +1,7 @@
-//import 'package:alibyo_qr_scanner/screen/qr_scanner_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../home_screen.dart';
-import '../resident_scanner_screen.dart';
 import './background.dart';
 import '../../model/http_exception.dart';
 import '../../model/auth.dart';
@@ -63,13 +60,6 @@ class _BodyState extends State<Body> {
         authData['password'],
         context,
       );
-
-      // Navigator.of(context).pushNamed(HomeScreen.routeName);
-      //  Navigator.push(
-      // context,
-      // MaterialPageRoute(builder: (context) =>
-      //   HomeScreen(_authData)),
-      //);
     } on HttpException catch (error) {
       var errorMessage = 'Authentication failed';
       if (error.toString().contains('Unauthorized')) {
